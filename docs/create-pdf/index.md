@@ -241,6 +241,9 @@ const extractManualPaths = asnyc (page: Puppeteer.Page) => {
 ]
 ```
 
+
+<br>
+
 ##### Vitepress 스타일 수집
 
 다음으로 스타일을 수집해야합니다.
@@ -270,9 +273,9 @@ const extractManualPaths = asnyc (page: Puppeteer.Page) => {
 
 ##### 페이지 계산
 
-목차페이지에 들어갈 페이지를 계산해보겠습니다.
+목차 페이지에 들어갈 페이지 Number 를 계산해보겠습니다.
 
-현재 목차페이지에서 선택자에 아래와 같은 스타일을 적용 중입니다.
+현재 팀 매뉴얼의 목차 페이지 요소 선택자에 아래와 같은 스타일을 적용 중입니다.
 
 ```css
 .level-1 {
@@ -309,8 +312,11 @@ const extractManualPaths = asnyc (page: Puppeteer.Page) => {
 }
 ```
 
-각 `level`
+각 `level-{n}` 은 숫자가 커질 수록 목차 뎁스, 즉 하위 메뉴 제목의 스타일을 구성합니다.
 
+:::tip
+스타일은 변경하셔도 됩니다!
+:::
 
 
 
@@ -331,305 +337,3 @@ const extractManualPaths = asnyc (page: Puppeteer.Page) => {
 
 
 
-
-```json
-{
-  "scripts": {
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs",
-    "docs:pdf": "node scripts/generate-pdf.js"
-  }
-}
-```
-
-# PDF 생성 프로세스 흐름 설명
-
-## 1. 초기화 및 설정
-- puppeteer를 사용하여 헤드리스 브라우저 실행
-- PDF 저장 디렉토리 설정 및 확인
-- 기본 URL 설정 (로컬호스트 또는 환경변수에서 가져옴)
-
-## 2. 콘텐츠 수집 단계
-- 브라우저로 클라이언트 스텁 매뉴얼 첫 페이지 접속
-- 사이드바에서 `/developer-manual/client-stub/` 경로로 시작하는 모든 링크 추출
-- 각 페이지의 제목과 경로 정보 수집 및 중복 제거
-
-## 3. 페이지 번호 매핑 구성
-- 각 섹션의 시작 페이지 번호 계산
-- 표지와 목차 페이지 고려하여 오프셋 적용
-- 각 페이지 콘텐츠 수집 및 페이지 수 계산
-
-## 4. 본문 생성 프로세스
-- 각 페이지 순차적 방문하여 콘텐츠 추출
-- 이미지 최적화 및 스타일 조정
-- 빈 섹션 제거 및 페이지 나누기 설정
-- 임시 PDF 생성으로 각 섹션의 페이지 수 계산
-
-## 5. 목차 생성 과정
-- 기본 목차 템플릿(list.html) 로드
-- JSDOM으로 목차 HTML 구조 조작
-- 각 섹션의 제목과 계산된 페이지 번호 삽입
-- 수정된 목차 HTML 저장 및 PDF로 변환(표지 포함)
-
-## 6. PDF 조합 및 마무리
-- 본문 콘텐츠를 HTML로 조합하여 메인 PDF 생성
-- 목차 PDF와 본문 PDF 병합
-- 임시 파일 삭제 및 최종 PDF 저장
-- 완료 메시지 출력
-
-## 주요 기술 포인트
-- puppeteer로 웹페이지 렌더링 및 PDF 변환
-- pdf-lib로 PDF 파일 병합 및 조작
-- JSDOM으로 HTML 구조 조작
-- 웹사이트의 CSS 스타일 유지하며 PDF 최적화
-
-### 3. 전체 문서를 하나의 PDF로 통합
-
-여러 페이지를 하나의 PDF로 합치기 위한 `merge-pdfs.js` 스크립트:
-
-```javascript
-const { PDFDocument } = require("pdf-lib");
-const fs = require("fs");
-const path = require("path");
-
-// PDF 통합 함수
-async function mergePDFs(inputFiles, outputFile) {
-  // 새 PDF 문서 생성
-  const mergedPdf = await PDFDocument.create();
-
-  // 각 PDF 파일 처리
-  for (const inputFile of inputFiles) {
-    const pdfBytes = fs.readFileSync(inputFile);
-    const pdf = await PDFDocument.load(pdfBytes);
-    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-    copiedPages.forEach((page) => {
-      mergedPdf.addPage(page);
-    });
-  }
-
-  // 통합된 PDF 저장
-  const mergedPdfFile = await mergedPdf.save();
-  fs.writeFileSync(outputFile, mergedPdfFile);
-  console.log(`Merged PDF saved to: ${outputFile}`);
-}
-
-// 입력 파일 경로
-const pdfDir = path.join(__dirname, "../pdf");
-const inputFiles = [
-  path.join(pdfDir, "home.pdf"),
-  path.join(pdfDir, "guide.pdf"),
-  path.join(pdfDir, "reference.pdf"),
-];
-
-// 출력 파일 경로
-const outputFile = path.join(pdfDir, "complete-documentation.pdf");
-
-// 실행
-mergePDFs(inputFiles, outputFile).catch((err) => {
-  console.error("PDF merging failed:", err);
-  process.exit(1);
-});
-```
-
-필요한 라이브러리 설치:
-
-```bash
-npm install --save-dev pdf-lib
-```
-
-## PDF 품질 최적화 팁
-
-### 1. 인쇄용 스타일 시트 적용
-
-`docs/.vitepress/theme/custom.css`에 인쇄용 스타일 추가:
-
-```css
-/* 인쇄용 스타일 */
-@media print {
-  /* 탐색 요소 숨기기 */
-  .vp-navbar,
-  .VPSidebar,
-  .VPDocFooter,
-  .VPDocAside {
-    display: none !important;
-  }
-
-  /* 컨텐츠 영역 최대화 */
-  .VPContent,
-  .VPDoc {
-    max-width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  /* 페이지 나누기 조정 */
-  h1,
-  h2 {
-    page-break-before: always;
-  }
-
-  h1:first-of-type,
-  h2:first-of-type {
-    page-break-before: avoid;
-  }
-
-  /* 페이지 내 요소 유지 */
-  pre,
-  blockquote,
-  table {
-    page-break-inside: avoid;
-  }
-
-  /* 링크 주소 표시 */
-  a[href]:after {
-    content: " (" attr(href) ")";
-    font-size: 90%;
-    color: #555;
-  }
-
-  /* 내부 링크는 주소 표시 안 함 */
-  a[href^="#"]:after,
-  a[href^="/"]:after {
-    content: "";
-  }
-
-  /* 인쇄시 배경색 및 이미지 표시 */
-  * {
-    -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-}
-```
-
-### 2. 목차 및 북마크 생성
-
-Puppeteer 스크립트를 확장하여 목차 생성:
-
-```javascript
-// PDF 생성 전 헤딩 정보 추출
-const headings = await tab.evaluate(() => {
-  const headingElements = Array.from(document.querySelectorAll("h1, h2, h3"));
-  return headingElements.map((heading) => ({
-    text: heading.textContent,
-    level: parseInt(heading.tagName.substring(1)),
-    id: heading.id,
-  }));
-});
-
-// 목차 페이지 생성 및 추가
-const tocHtml = `
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 2cm; }
-    h1 { text-align: center; margin-bottom: 2cm; }
-    .toc-item { margin-bottom: 8px; }
-    .toc-level-1 { margin-left: 0; font-weight: bold; }
-    .toc-level-2 { margin-left: 1cm; }
-    .toc-level-3 { margin-left: 2cm; }
-  </style>
-</head>
-<body>
-  <h1>목차</h1>
-  ${headings
-    .map(
-      (h) => `
-    <div class="toc-item toc-level-${h.level}">
-      ${h.text} ........................ ${h.pageNumber || ""}
-    </div>
-  `
-    )
-    .join("")}
-</body>
-</html>
-`;
-```
-
-## PDF 변환 자동화
-
-### CI/CD 파이프라인에 통합
-
-GitHub Actions workflow 예시 (`pdf-generation.yml`):
-
-```yaml
-name: Generate Documentation PDFs
-
-on:
-  push:
-    branches: [main]
-    paths:
-      - "docs/**"
-
-jobs:
-  build-and-generate-pdf:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build documentation
-        run: npm run docs:build
-
-      - name: Start preview server
-        run: npm run docs:preview &
-
-      - name: Wait for server
-        run: sleep 10
-
-      - name: Generate PDFs
-        run: npm run docs:pdf
-
-      - name: Upload PDFs as artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: documentation-pdfs
-          path: pdf/
-
-      # 선택적: 릴리스에 PDF 첨부
-      - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
-        with:
-          files: pdf/complete-documentation.pdf
-```
-
-## 다국어 문서 PDF 생성
-
-다국어 문서를 위한 PDF 생성 확장 스크립트:
-
-```javascript
-// 언어별 URL 구성
-const languages = ["ko", "en", "ja"];
-const pages = [
-  { path: "/", name: "home" },
-  { path: "/guide/", name: "guide" },
-  { path: "/reference/", name: "reference" },
-];
-
-// 언어별 페이지 URL 생성
-const allPages = [];
-for (const lang of languages) {
-  const langPrefix = lang === "ko" ? "" : `/${lang}`;
-  for (const page of pages) {
-    allPages.push({
-      url: `http://localhost:3000${langPrefix}${page.path}`,
-      filename: `${lang}-${page.name}.pdf`,
-      language: lang,
-    });
-  }
-}
-```
-
-이러한 방법을 활용하면 VitePress 문서를 고품질 PDF로 변환하여 다양한 용도로 활용할 수 있습니다.

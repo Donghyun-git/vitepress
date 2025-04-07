@@ -1,0 +1,13 @@
+{
+  "name": "vitepress-semina",
+  "type": "module",
+  "scripts": {
+    "docs:dev": "vitepress dev --port 5175 --host",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3",
+    "vue-easy-lightbox": "^1.19.0"
+  }
+}

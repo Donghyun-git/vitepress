@@ -35,7 +35,7 @@
   <div class="menu-item">
     <span class="menu-number">4.</span>
     <div className="menu-link">
-        <a href="/chapter4/pre-setting/">
+        <a href="/write/">
           컨텐츠 구성 및 작성 방법
         </a>
     </div>
@@ -44,7 +44,7 @@
   <div class="menu-item">
     <span class="menu-number">5.</span>
     <div className="menu-link">
-        <a href="/chapter4/pre-setting/">
+        <a href="/style/">
           문서에 스타일 적용하기
         </a>
     </div>
@@ -53,7 +53,7 @@
   <div class="menu-item">
     <span class="menu-number">6.</span>
     <div className="menu-link">
-        <a href="/chapter4/pre-setting/">
+        <a href="/create-pdf/">
           문서 PDF 생성하기
         </a>
     </div>
@@ -62,7 +62,7 @@
   <div class="menu-item">
     <span class="menu-number">7.</span>
     <div className="menu-link">
-        <a href="/chapter4/pre-setting/">
+        <a href="/deploy/">
           배포 및 유지보수
         </a>
     </div>
@@ -71,7 +71,7 @@
   <div class="menu-item">
     <span class="menu-number">7.</span>
     <div className="menu-link">
-        <a href="/chapter4/pre-setting/">
+        <a href="/qna/">
           QnA
         </a>
     </div>

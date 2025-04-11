@@ -58,7 +58,8 @@
 완벽하진 않지만 검색기능이 개선되었습니다.
 
 > `브라우저 검색 기능 사용 가능`
-> :::
+
+:::
 
 #### ❌ 여전히 남아있는 한계
 
@@ -90,9 +91,7 @@
 
 ### 📌 WriterSide 도입
 
-<p>
-<img src="/images/writerside.png"/>
-</p>
+<LightBoxImg src="/images/writerside.png" />
 
 JetBrain에서 제공하는 `WriterSide` 라는 도구를 도입하게 되었습니다.
 

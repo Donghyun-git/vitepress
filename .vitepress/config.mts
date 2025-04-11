@@ -93,11 +93,13 @@ export default defineConfig({
 
             {
               text: "7. 배포 및 유지보수",
+              link: "/deploy/",
               collapsed: false,
             },
 
             {
               text: "8. QnA",
+              link: "/qna/",
               collapsed: false,
             },
           ],

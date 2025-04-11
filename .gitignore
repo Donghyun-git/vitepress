@@ -16,6 +16,8 @@ dist-ssr
 #cache
 cache
 
+*.pdf
+
 *.sh
 *.tgz
 *.ps1

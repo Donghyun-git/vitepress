@@ -1,27 +1,25 @@
 # 컨텐츠 구성 및 작성 방법
 
-
 ## 📌 컨텐츠 구성하기
 
-
-각 경로는 `디렉토리명` 으로 맵핑됩니다.  하위에 `index.md` 파일이 반드시 존재해야 합니다.
+각 경로는 `디렉토리명` 으로 맵핑됩니다. 하위에 `index.md` 파일이 반드시 존재해야 합니다.
 
 예를 들어 `/start/run/finish/` 라는 경로가 있다고 가정해보겠습니다.
 
 그러면 디렉토리 구조는 같이 구성되어야 합니다.
 
 ```markdown
-📂 docs  # srcDir
- ┣ 📂 start
- ┃ ┣ 📂 run 
- ┃ ┃ ┣ 📂 finish 
- ┃ ┃ ┃  ┗ 📄 index.md # 이 파일이 해당 경로의 문서로 보여집니다.  
+📂 docs # srcDir
+┣ 📂 start
+┃ ┣ 📂 run
+┃ ┃ ┣ 📂 finish
+┃ ┃ ┃ ┗ 📄 index.md # 이 파일이 해당 경로의 문서로 보여집니다.
 ```
-
 
 :::warning
 만약 해당 디렉토리 경로에 `index.md` 파일이 존재하지 않는다면 `not Found 404` 페이지가 노출됩니다.
 :::
+
 ## 📌 마크다운 기본 문법
 
 `VitePress`는 마크다운을 기반으로 컨텐츠를 작성합니다. 기본적인 마크다운 문법을 알아보겠습니다.
@@ -52,12 +50,11 @@ _이탤릭체_
 
 기본 글씨
 
-_이탤릭체_ 
+_이탤릭체_
 
 **볼드체**
 
 ~~취소선~~
-
 
 ### 목록 ( 리스트 )
 
@@ -94,41 +91,39 @@ _이탤릭체_
 
 ### Table
 
-
 ```markdwon
 | 헤더 | 헤더 | 헤더 | 헤더 |
 | :--- | :---: | :--- | ---: |
 | 좌측정렬 | 가운데정렬 | 좌측정렬 | 우측정렬 |
 ```
 
-| 헤더 | 헤더 | 헤더 | 헤더 |
-| :--- | :---: | :--- | ---: |
+| 헤더     |    헤더    | 헤더     |     헤더 |
+| :------- | :--------: | :------- | -------: |
 | 좌측정렬 | 가운데정렬 | 좌측정렬 | 우측정렬 |
 
 `HTML`태그로도 사용 가능합니다.
 
 ```html
 <div style="padding: 4px; border: 1px solid #dedede;">
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">헤더</th>
-      <th style="text-align: center">헤더</th>
-      <th style="text-align: left">헤더</th>
-      <th style="text-align: right">헤더</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">좌측정렬</td>
-      <td style="text-align: center">가운데정렬</td>
-      <td style="text-align: left">좌측정렬</td>
-      <td style="text-align: right">우측정렬</td>
-    </tr>
-  </tbody>
-</table>
+  <table>
+    <thead>
+      <tr>
+        <th style="text-align: left">헤더</th>
+        <th style="text-align: center">헤더</th>
+        <th style="text-align: left">헤더</th>
+        <th style="text-align: right">헤더</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align: left">좌측정렬</td>
+        <td style="text-align: center">가운데정렬</td>
+        <td style="text-align: left">좌측정렬</td>
+        <td style="text-align: right">우측정렬</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-
 ```
 
 <div style="padding: 4px; border: 1px solid #dedede;">
@@ -166,7 +161,6 @@ function hello() {
 ```
 ````
 
-
 ## 📌 VitePress 확장 마크다운 기능
 
 `VitePress`는 기본 마크다운에 여러 확장 기능을 제공합니다.
@@ -175,8 +169,8 @@ function hello() {
 
 ### 코드 블록 확장 기능
 
-
 #### 하이라이팅
+
 ````markdown
 ```js{4}
 export default {
@@ -254,7 +248,7 @@ export default {
 export default {
   data() {
     return {
-      msg: '삭제됨' # [!code --] 
+      msg: '삭제됨' # [!code --]
       msg: '추가됨' # [!code ++]
     }
   }
@@ -266,7 +260,7 @@ export default {
 export default {
   data() {
     return {
-      msg: '삭제됨' // [!code --] 
+      msg: '삭제됨' // [!code --]
       msg: '추가됨' // [!code ++]
     }
   }
@@ -278,7 +272,7 @@ export default {
 export default {
   data() {
     return {
-      msg: '경고', # [!code warning] 
+      msg: '경고', # [!code warning]
       msg: '에러' # [!code error]
     }
   }
@@ -290,13 +284,12 @@ export default {
 export default {
   data() {
     return {
-      msg: '경고', // [!code warning] 
-      msg: '에러' // [!code error]
-    }
-  }
-}
+      msg: "경고", // [!code warning]
+      msg: "에러", // [!code error]
+    };
+  },
+};
 ```
-
 
 <br>
 
@@ -372,11 +365,9 @@ export default {
 
 :smile: :heart: :thumbsup: :dog: :cat: :dolphin:
 
-
 ---
 
 <br>
-
 
 기본적인 문법은 모두 알아보았습니다.
 
@@ -385,23 +376,13 @@ export default {
 ```markdown
 # 기존 매뉴얼 관리 방법
 
-  
-
 <br>
-
-  
 
 `Vitepress` 를 도입하기 이전에는 아래와 같은 방식으로 매뉴얼을 관리해왔습니다.
 
-  
-
 ---
 
-  
-
 ###  📌 워드 문서와 PDF 기반 매뉴얼
-
-  
 
 :::info
 
@@ -409,13 +390,12 @@ export default {
 
 - **매뉴얼 관련 PDF 생성**
 
-- **이메일이나 메신저로 생성한 `PDF` 공유**  
+- **이메일이나 메신저로 생성한 `PDF` 공유**
 
 :::
 
 %%....%%
 ```
-
 
 ## 📌 번외 ) Obsidian 활용하기
 
@@ -425,22 +405,18 @@ export default {
 
 `vitepress` 프로젝트는 소스코드 변경사항 저장 시, 변경사항이 바로 적용되는 `핫 리로딩`이 적용되고, `Obsidan`은 문서 작성 도중, 타이핑이 멈추면 자동저장 기능을 제공합니다.
 
-<p>
-<img src="/images/obsidian.png"/>
-</p>
+`vitepress`의 확장 기능까진 보이진 않지만, `markdown` 페이지에 반영될 컨텐츠들이 바로바로 보이기 때문에 편합니다.
+
+<LightBoxImg src="/images/obsidian.png"/>
 
 :::tip
 매뉴얼의 docs 폴더를 보관함으로 설정하고 위와 같이 작업하면 편합니다. :smile:
 :::
 
-
-
 <br>
 
 ---
 
-
 기본 작성에 필요한 기능 및 문법에 대해 설명드렸습니다.
 
 다음으로 스타일 적용에 대해 알아보겠습니다.
-
